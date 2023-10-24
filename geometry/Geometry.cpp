@@ -1,83 +1,76 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <windows.h>
 #include <math.h>
 
-struct Point
+using namespace std;
+
+class Point
 {
+public:
 	int x;
 	int y;
 	int z;
-	char name[20];
+	string name;
 
-	void setPoint(struct Point* point)
+	Point()
 	{
 		int x, y, z;
-		char name[20];
-		printf("Введите название точки: ");
-		gets_s(name);
-		printf("Введите координаты точки \"%s\": ");
-		scanf("%d%d%d", &x, &y, &z);
-		while (getchar() != '\n');
-		point->x = x;
-		point->y = y;
-		point->z = z;
-		strcpy(point->name, name);
+		string name;
+		cout << "Введите название точки: ";
+		cin >> name;
+		cout << "Введите координаты точки \"" << name  << "\": ";
+		cin >> x >> y >> z;
+		this->x = x;
+		this->y = y;
+		this->z = z;
+		this->name = name;
 	}
 
 	void printPoint(struct Point* point)
 	{
-		printf("Точка \"%s\": (%d, %d, %d)\n", point->name, point->x, point->y, point->z);
+		cout << this->name << this->x << this->y << this->z;
 	}
 };
 
-struct Vector
+class Vector
 {
-	struct Point point1;
-	struct Point point2;
+public:
+	Point point1;
+	Point point2;
 
-	void setVector(struct Vector* vector)
+	double lenghtVector()
 	{
-		struct Point bufPoint1, bufPoint2;
-		bufPoint1.setPoint(&bufPoint1);
-		bufPoint2.setPoint(&bufPoint2);
-		vector->point1 = bufPoint1;
-		vector->point2 = bufPoint2;
-	}
-
-	double lenghtVector(struct Vector* vector)
-	{
-		int* coordinatesVector = vector->findCoordinates(vector);
+		int* coordinatesVector = this->findCoordinates();
 		double lenght, X, Y, Z;
 		X = pow(coordinatesVector[0], 2);
 		Y = pow(coordinatesVector[1], 2);
-		Z = pow(coordinatesVector[], 2);
+		Z = pow(coordinatesVector[2], 2);
 		lenght = sqrt(X + Y + Z);
 		return lenght;
 	}
 
-	int* findCoordinates(struct Vector* vector)
+	int* findCoordinates()
 	{
 		int coordinates[3] =
 		{
-			vector->point2.x - vector->point1.x,
-			vector->point2.y - vector->point1.y,
-			vector->point2.z - vector->point1.z
+			this->point2.x - this->point1.x,
+			this->point2.y - this->point1.y,
+			this->point2.z - this->point1.z
 		};
 		return coordinates;
 	}
 
-	double scalarProduct(struct Vector* vector1, struct Vector* vector2)
+	double scalarProduct(Vector* vector2)
 	{
-		int* coordinatesVector1 = vector1->findCoordinates(vector1);
-		int* coordinatesVector2 = vector2->findCoordinates(vector2);
+		int* coordinatesVector1 = this->findCoordinates();
+		int* coordinatesVector2 = vector2->findCoordinates();
 		return coordinatesVector1[0] * coordinatesVector2[0] + coordinatesVector1[1] * coordinatesVector2[1] + coordinatesVector1[2] * coordinatesVector2[2];
 	}
 
-	double additionVectors(struct Vector* vector1, struct Vector* vector2)
+	double additionVectors(Vector* vector2)
 	{
-		int* coordinatesVector1 = vector1->findCoordinates(vector1);
-		int* coordinatesVector2 = vector2->findCoordinates(vector2);
+		int* coordinatesVector1 = this->findCoordinates();
+		int* coordinatesVector2 = vector2->findCoordinates();
 		int coordinates[3] =
 		{
 			coordinatesVector1[0] + coordinatesVector2[0],
@@ -87,98 +80,80 @@ struct Vector
 		double lenght, X, Y, Z;
 		X = pow(coordinates[0], 2);
 		Y = pow(coordinates[1], 2);
-		Z = pow(coordinates[], 2);
+		Z = pow(coordinates[2], 2);
 		lenght = sqrt(X + Y + Z);
 		return lenght;
 	}
 
-	void printVector(struct Vector* vector)
+	void printVector()
 	{
-		int* coordinates = vector->findCoordinates(vector);
-		printf("Вектор \"%s%s\"(%d, %d, %d)\n", vector->point1.name, vector->point2.name, coordinates[0], coordinates[1], coordinates[2]);
+		int* coordinates = this->findCoordinates();
+		cout << "Вектор \"" << this->point1.name << this->point2.name << "\"(" << coordinates[0] << ", " << coordinates[1] << ", " << coordinates[2] << ")";
 	}
 };
 
-struct ColoredVector
+class ColoredVector : public Vector
 {
-	struct Vector vector;
-	char color[20];
+public:
+	Vector vector;
+	string color;
 
-	void setColoredVector(struct ColoredVector* coloredVector)
+	ColoredVector()
 	{
-		struct Vector vector;
-		vector.setVector(&vector);
-		coloredVector->vector = vector;
-		printf("Введите цвет вектора: ");
-		gets_s(coloredVector->color);
+		cout << "Введите цвет вектора: ";
+		cin >> color;
 	}
 
-	void printColoredVector(struct ColoredVector* coloredVector)
+	void printColoredVector()
 	{
-		coloredVector->vector.printVector(&coloredVector->vector);
-		printf("Цвет вектора: %s\n", coloredVector->color);
+		Vector::printVector();
+		cout << "Цвет вектора: " << color;
 	}
 };
 
-struct Triangle
+class Triangle
 {
-	struct ColoredVector vector1;
-	struct ColoredVector vector2;
+public:
+	ColoredVector vector1;
+	ColoredVector vector2;
 
-	void setTriangle(struct Triangle* triangle)
+	int perimeterTriangle()
 	{
-		struct ColoredVector vector1, vector2;
-		vector1.vector.setVector(&vector1);
-		vector2.vector.setVector(&vector2);
-		triangle->vector1 = vector1;
-		triangle->vector2 = vector2;
-	}
-
-	int perimeterTriangle(struct Triangle* triangle)
-	{
-		struct ColoredVector vector1, vector2;
-		return vector1.vector.lenghtVector(&triangle->vector1.vector) + vector1.vector.lenghtVector(&vector1.vector) + vector1.vector.additionVectors(&vector1.vector, &vector2.vector);
+		ColoredVector vector1, vector2;
+		return vector1.vector.lenghtVector() + vector1.vector.lenghtVector() + vector1.vector.additionVectors(&vector2.vector);
 	}
 
 	void printTriangle(struct Triangle* triangle)
 	{
-		triangle->vector1.vector.printVector(&triangle->vector1.vector);
-		triangle->vector2.vector.printVector(&triangle->vector2.vector);
+		this->vector1.vector.printVector();
+		this->vector2.vector.printVector();
 	}
 };
 
-struct Parallelogram
+class Parallelogram
 {
-	struct ColoredVector vector1;
-	struct ColoredVector vector2;
+public:
+	ColoredVector vector1;
+	ColoredVector vector2;
 
-	void setParalleogram(struct Parallelogram* parallelogram)
+	int perimeterParallelogram()
 	{
-		struct ColoredVector vector1, vector2;
-		vector1.vector.setVector(&vector1.vector);
-		vector2.vector.setVector(&vector2.vector);
-		parallelogram->vector1 = vector1;
-		parallelogram->vector2 = vector2;
+		return this->vector1.vector.lenghtVector() * 2 + this->vector2.vector.lenghtVector() * 2;
 	}
 
-	int perimeterParallelogram(struct Parallelogram* parallelogram)
-	{
-		return parallelogram->vector1.vector.lenghtVector(&parallelogram->vector1.vector) * 2 + parallelogram->vector2.vector.lenghtVector(&parallelogram->vector2.vector) * 2;
-	}
-
-	double squareParallelogram(struct Parallelogram* parallelogram)
+	double squareParallelogram()
 	{
 		double sinus, cosinus, lenghtVector1, lenghtVector2;
-		lenghtVector1 = parallelogram->vector1.vector.lenghtVector(&parallelogram->vector1.vector);
-		lenghtVector2 = parallelogram->vector2.vector.lenghtVector(&parallelogram->vector2.vector);
-		cosinus = parallelogram->vector1.vector.scalarProduct(&parallelogram->vector1.vector, &parallelogram->vector2.vector) / (lenghtVector1 * lenghtVector2);
+		lenghtVector1 = this->vector1.vector.lenghtVector();
+		lenghtVector2 = this->vector2.vector.lenghtVector();
+		cosinus = this->vector1.vector.scalarProduct(&this->vector2.vector) / (lenghtVector1 * lenghtVector2);
 		sinus = sqrt(1 - pow(cosinus, 2));
 		return lenghtVector1 * lenghtVector2 * sinus;
 	}
 	
-	void printParallelogram(struct Parallelogram* parallelogram)
+	void printParallelogram()
 	{
-		parallelogram->vector1.vector.printVector(&parallelogram->vector1.vector);
-		parallelogram->vector2.vector.printVector(&parallelogram->vector2.vector);
+		this->vector1.vector.printVector();
+		this->vector2.vector.printVector();
 	}
 };
