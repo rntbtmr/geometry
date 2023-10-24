@@ -1,51 +1,52 @@
 #pragma once
 
-struct Point
+class Point
 {
+private:
 	int x;
 	int y;
 	int z;
 	char name[20];
-	void setPoint(struct Point* point);
-	void printPoint(struct Point* point);
+	Point();
+	void printPoint();
 };
 
-struct Vector
+class Vector
 {
-	struct Point point1;
-	struct Point point2;
-	void setVector(struct Vector* vector);
-	double lenghtVector(struct Vector* vector);
-	int* findCoordinates(struct Vector* vector);
-	double scalarProduct(struct Vector* vector1, struct Vector* vector2);
-	int dditionVectors(struct Vector* vector1, struct Vector* vector2);
-	void printVector(struct Vector* vector);
+public:
+	Point point1;
+	Point point2;
+	double lenghtVector();
+	int* findCoordinates();
+	double scalarProduct(Vector* vector2);
+	double additionVectors(Vector* vector2);
+	void printVector();
 };
 
-struct ColoredVector
+class ColoredVector : public Vector
 {
-	struct Vector vector;
+public:
+	Vector vector;
 	char color[20];
-	void setColoredVector(struct ColoredVector* coloredVector);
-	void printColoredVector(struct ColoredVector* coloredVector);
+	ColoredVector();
+	void printColoredVector();
 };
 
-struct Triangle 
+class Triangle 
 {
-	struct ColoredVector vector1;
-	struct ColoredVector vector2;
-	void setTriangle(struct Triangle* triangle);
-	int perimeterTriangle(struct Triangle* triangle);
-	double squareTriangle(struct Triangle* triangle);
-	void printTriangle(struct Triangle* triangle);
+public:
+	ColoredVector vector1;
+	ColoredVector vector2;
+	int perimeterTriangle();
+	void printTriangle();
 };
 
-struct Parallelogram 
+class Parallelogram 
 {
-	struct ColoredVector vector1;
-	struct ColoredVector vector2;
-	void setParalleogram(struct Parallelogram* parallelogram);
-	int perimeterParallelogram(struct Parallelogram* parallelogram);
-	double squareParallelogram(struct Parallelogram* parallelogram);
-	void printParallelogram(struct Parallelogram* parallelogram);
+public:
+	ColoredVector vector1;
+	ColoredVector vector2;
+	int perimeterParallelogram();
+	double squareParallelogram();
+	void printParallelogram();
 };
