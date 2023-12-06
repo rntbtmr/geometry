@@ -8,6 +8,7 @@ private:
 	int z;
 	char name[20];
 	Point();
+	static void printTemplatePoint();
 	void printPoint();
 };
 
@@ -16,10 +17,13 @@ class Vector
 public:
 	Point point1;
 	Point point2;
+	static int amountVector;
+	Vector();
 	double lenghtVector();
 	int* findCoordinates();
-	double scalarProduct(Vector* vector2);
-	double additionVectors(Vector* vector2);
+	double scalarProduct();
+	double additionVectors();
+	void printCoordinates();
 	void printVector();
 };
 
@@ -37,6 +41,7 @@ class Triangle
 public:
 	ColoredVector vector1;
 	ColoredVector vector2;
+	friend void setVectors();
 	int perimeterTriangle();
 	void printTriangle();
 };

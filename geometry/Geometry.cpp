@@ -26,6 +26,11 @@ public:
 		this->name = name;
 	}
 
+	static void printTemplatePoint()
+	{
+		cout << "Название точки(x,y,z)\n";
+	}
+
 	void printPoint(struct Point* point)
 	{
 		cout << this->name << this->x << this->y << this->z;
@@ -37,6 +42,11 @@ class Vector
 public:
 	Point point1;
 	Point point2;
+	static int amountVector; // статическое поле
+	
+	Vector() {
+		amountVector++; // перегрузка оператора постфиксным методом
+	}
 
 	double lenghtVector()
 	{
@@ -84,6 +94,15 @@ public:
 		lenght = sqrt(X + Y + Z);
 		return lenght;
 	}
+	
+	void printCoordinates(Vector* vector)
+	{
+		int* coordinatesVector = this->findCoordinates();
+		for (int i = 0; i <= 3; ++i)
+		{
+			cout << coordinatesVector[i - 1] << "\n";
+		}
+	}
 
 	void printVector()
 	{
@@ -117,13 +136,20 @@ public:
 	ColoredVector vector1;
 	ColoredVector vector2;
 
+	// дружественная функция
+	friend void setVectors(Triangle triangle, ColoredVector vector1, ColoredVector vector2)
+	{
+		triangle.vector1 = vector1;
+		triangle.vector2 = vector2;
+	}
+
 	int perimeterTriangle()
 	{
 		ColoredVector vector1, vector2;
 		return vector1.vector.lenghtVector() + vector1.vector.lenghtVector() + vector1.vector.additionVectors(&vector2.vector);
 	}
 
-	void printTriangle(struct Triangle* triangle)
+	void printTriangle(Triangle triangle)
 	{
 		this->vector1.vector.printVector();
 		this->vector2.vector.printVector();
