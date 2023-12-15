@@ -27,31 +27,39 @@ public:
 	void printVector();
 };
 
+template <typename Color>
 class ColoredVector : public Vector
 {
 public:
 	Vector vector;
-	char color[20];
 	ColoredVector();
+	void setColor();
+	Color getColor();
 	void printColoredVector();
 };
 
-class Triangle 
+class Triangle : public Figure 
 {
 public:
-	ColoredVector vector1;
-	ColoredVector vector2;
+	ColoredVector<Vector> vector1;
+	ColoredVector<Vector> vector2;
 	friend void setVectors();
 	int perimeterTriangle();
-	void printTriangle();
+	void printFigure();
 };
 
-class Parallelogram 
+class Parallelogram : public Figure
 {
 public:
-	ColoredVector vector1;
-	ColoredVector vector2;
+	ColoredVector<Vector> vector1;
+	ColoredVector<Vector> vector2;
 	int perimeterParallelogram();
 	double squareParallelogram();
-	void printParallelogram();
+	void printFigure();
+};
+
+class Figure 
+{
+protected:
+	void printFigure();
 };

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <windows.h>
 #include <math.h>
+#include <Color.Dlg>
+
 
 using namespace std;
 
@@ -112,13 +114,14 @@ public:
 	}
 };
 
+// Шаблон класса
+template <typename Color>
 class ColoredVector : public Vector
 {
 public:
 	Vector vector;
-	string color;
 
-	ColoredVector()
+	ColoredVector(Point point1, Point point2, Color color)
 	{
 		// try, catch, throw блоки
 		int* cooridanatesVector = vector.findCoordinates();
@@ -136,8 +139,17 @@ public:
 			cout << "Ошибка: " << errorMessage << endl;
 
 		}
-		cout << "Введите цвет вектора: ";
-		cin >> color;
+		Vector(point1, point2);
+		this->color = color;
+
+	}
+
+	void setColor(Color color) {
+		this->color = color;
+	}
+
+	Color getColar() {
+		return this->color;
 	}
 
 	void printColoredVector()
@@ -147,14 +159,14 @@ public:
 	}
 };
 
-class Triangle
+class Triangle : public Figure
 {
 public:
-	ColoredVector vector1;
-	ColoredVector vector2;
+	ColoredVector<Vector> vector1;
+	ColoredVector<Vector> vector2;
 
 	// дружественная функция
-	friend void setVectors(Triangle triangle, ColoredVector vector1, ColoredVector vector2)
+	friend void setVectors(Triangle triangle, ColoredVector<Vector> vector1, ColoredVector<Vector> vector2)
 	{
 		triangle.vector1 = vector1;
 		triangle.vector2 = vector2;
@@ -162,22 +174,21 @@ public:
 
 	int perimeterTriangle()
 	{
-		ColoredVector vector1, vector2;
 		return vector1.vector.lenghtVector() + vector1.vector.lenghtVector() + vector1.vector.additionVectors(&vector2.vector);
 	}
 
-	void printTriangle(Triangle triangle)
+	void printFigure()
 	{
-		this->vector1.vector.printVector();
-		this->vector2.vector.printVector();
+		vector1.printColoredVector();
+		vector2.printColoredVector();
 	}
 };
 
-class Parallelogram
+class Parallelogram : public Figure
 {
 public:
-	ColoredVector vector1;
-	ColoredVector vector2;
+	ColoredVector<Vector> vector1;
+	ColoredVector<Vector> vector2;
 
 	int perimeterParallelogram()
 	{
@@ -194,9 +205,18 @@ public:
 		return lenghtVector1 * lenghtVector2 * sinus;
 	}
 	
-	void printParallelogram()
+	void printFigure()
 	{
-		this->vector1.vector.printVector();
-		this->vector2.vector.printVector();
+		vector1.printColoredVector();
+		vector2.printColoredVector();
 	}
+};
+
+// Абстрактный класс
+class Figure
+{
+// Модификатор protected
+protected:
+	// Виртуальная функция
+	virtual void printFigure();
 };
