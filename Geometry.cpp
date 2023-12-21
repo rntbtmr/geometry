@@ -1,7 +1,8 @@
 #include <iostream>
 #include <windows.h>
 #include <math.h>
-#include <Color.Dlg>
+#include <list>
+#include <algorithm>
 
 
 using namespace std;
@@ -112,6 +113,23 @@ public:
 		int* coordinates = this->findCoordinates();
 		cout << "Вектор \"" << this->point1.name << this->point2.name << "\"(" << coordinates[0] << ", " << coordinates[1] << ", " << coordinates[2] << ")";
 	}
+
+
+	// Сортировка и поиск
+
+	bool compareLenghtVector(Vector* vector1, Vector* vector2)
+	{
+		return vector1->lenghtVector() > vector2->lenghtVector();
+	}
+	
+	Vector maxLenghtVector(list<Vector>& vectors) {
+		return *max_element(vectors.begin(), vectors.end(), compareLenghtVector);
+	}
+
+	list<Vector> sortLenghtVector(list<Vector>& vectors)
+	{
+		sort(vectors.begin(), vectors.end(), compareLenghtVector);
+	}
 };
 
 // Шаблон класса
@@ -187,29 +205,37 @@ public:
 class Parallelogram : public Figure
 {
 public:
-	ColoredVector<Vector> vector1;
-	ColoredVector<Vector> vector2;
+	// Использование контейнеров
+	list<ColoredVector<Vector>> vectors;
+	
+	Parallelogram(ColoredVector<Vector> vector1, ColoredVector<Vector> vector2) 
+	{
+		this->vectors.push_back(vector1);
+		this->vectors.push_back(vector2);
+
+	}
 
 	int perimeterParallelogram()
 	{
-		return this->vector1.vector.lenghtVector() * 2 + this->vector2.vector.lenghtVector() * 2;
+		return this->vectors.front().vector.lenghtVector() * 2 + this->vectors.back().vector.lenghtVector() * 2;
 	}
 
 	double squareParallelogram()
 	{
 		double sinus, cosinus, lenghtVector1, lenghtVector2;
-		lenghtVector1 = this->vector1.vector.lenghtVector();
-		lenghtVector2 = this->vector2.vector.lenghtVector();
-		cosinus = this->vector1.vector.scalarProduct(&this->vector2.vector) / (lenghtVector1 * lenghtVector2);
+		lenghtVector1 = this->vectors.front().vector.lenghtVector();
+		lenghtVector2 = this->vectors.back().vector.lenghtVector();
+		cosinus = this->vectors.front().vector.scalarProduct(&this->vectors.back().vector) / (lenghtVector1 * lenghtVector2);
 		sinus = sqrt(1 - pow(cosinus, 2));
 		return lenghtVector1 * lenghtVector2 * sinus;
 	}
 	
 	void printFigure()
 	{
-		vector1.printColoredVector();
-		vector2.printColoredVector();
+		vectors.front().printColoredVector();
+		vectors.back().printColoredVector();
 	}
+
 };
 
 // Абстрактный класс
